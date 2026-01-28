@@ -82,6 +82,12 @@ data_ov_neg: requirements
 data_maci_valid: requirements
 	$(PYTHON_INTERPRETER) -m visia_q_dataset.dataset filter-maci-valid
 
+## Calculate reliability and normality metrics
+.PHONY: metrics
+metrics: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.metrics
+
+
 
 #################################################################################
 # Self Documenting Commands                                                     #
