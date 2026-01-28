@@ -62,6 +62,10 @@ python -m visia_q_dataset.plots clinical-group-distribution
 
 All commands accept `--input-path`, `--output-path`, and `--skip-safeguard` (to bypass validation of the original dataset).
 
+## Cite
+
+If you use this dataset or code in academic work, please cite the associated data descriptor and the Zenodo record once available.
+
 ## Project Organization
 
 ```
