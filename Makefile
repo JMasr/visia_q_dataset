@@ -40,10 +40,20 @@ format:
 
 
 
-## Run tests
+## Run tests (integration tests skipped; no raw dataset needed)
 .PHONY: test
-test:
-	python -m pytest tests
+test: requirements
+	$(PYTHON_INTERPRETER) -m pytest tests -m "not integration"
+
+## Run integration tests (requires data/raw/visia_q_dataset.csv)
+.PHONY: test-integration
+test-integration: requirements
+	$(PYTHON_INTERPRETER) -m pytest tests -m integration
+
+## Run all tests including integration
+.PHONY: test-all
+test-all: requirements
+	$(PYTHON_INTERPRETER) -m pytest tests
 
 
 ## Set up Python interpreter environment
@@ -85,7 +95,22 @@ data_maci_valid: requirements
 ## Calculate reliability and normality metrics
 .PHONY: metrics
 metrics: requirements
-	$(PYTHON_INTERPRETER) -m visia_q_dataset.metrics
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.metrics run-metrics
+
+## Compute descriptive statistics (mean, SD, median, min, max) per instrument per group
+.PHONY: stats
+stats: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.metrics descriptive-stats
+
+## Reproduce and verify all numerical values reported in the paper
+.PHONY: reproduce
+reproduce: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.reproduce
+
+## Build codebook with Spanish item texts from raw/visia_q_structure.json
+.PHONY: codebook
+codebook: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.codebook
 
 
 

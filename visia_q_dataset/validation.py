@@ -156,7 +156,12 @@ EXPECTED_COLUMNS = [
 
 def validate_raw_dataset(input_path: Path) -> bool:
     if not input_path.exists():
-        logger.error(f"Input dataset not found: {input_path}")
+        logger.error(
+            f"Dataset not found at: {input_path}\n"
+            "  → Request access and download it from Zenodo:\n"
+            "     https://doi.org/10.5281/zenodo.20703908\n"
+            f"  → Then place the file at: {input_path}"
+        )
         return False
 
     df = pd.read_csv(input_path)
