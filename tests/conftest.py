@@ -2,7 +2,21 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from visia_q_dataset.config import RAW_DATA_FILE
 from visia_q_dataset.validation import EXPECTED_COLUMNS
+
+
+@pytest.fixture
+def real_dataset_path():
+    """Provide the raw dataset path for integration tests; fail (not skip) when absent."""
+    if not RAW_DATA_FILE.exists():
+        pytest.fail(
+            f"Integration test requires the real dataset at:\n"
+            f"  {RAW_DATA_FILE}\n"
+            f"Request access and download it from:\n"
+            f"  https://doi.org/10.5281/zenodo.20703908"
+        )
+    return RAW_DATA_FILE
 
 
 @pytest.fixture(scope="session")

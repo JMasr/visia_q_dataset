@@ -122,7 +122,7 @@ def run_metrics(
         alpha_rows.append(
             {
                 "instrument": instrument,
-                "cronbach_alpha": round(alpha, 4),
+                "cronbach_alpha": int(alpha * 10000) / 10000,  # floor-truncate, matches paper
                 "n_items": len(cols),
                 "n_rows": int(len(df_full)),
             }
