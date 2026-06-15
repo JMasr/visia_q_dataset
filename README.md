@@ -1,100 +1,132 @@
 # visia_q_dataset
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue)](https://www.python.org/downloads/release/python-3100/)
+[![tests](https://github.com/JMasr/visia_q_dataset/actions/workflows/tests.yml/badge.svg)](https://github.com/JMasr/visia_q_dataset/actions/workflows/tests.yml)
 
-<a target="_blank" href="https://www.python.org/downloads/release/python-3100/">
-    <img src=https://img.shields.io/badge/python-3.10-blue" />
-</a>
+Preprocessing, validation, and reproduction pipeline for the **VisIA-Q dataset** — a cross-sectional psychometric and demographic dataset of 207 adolescents at high-risk for suicide. Described in:
 
-Repository to preprocess the `visia-q_dataset.csv` dataset from the VisIA project, with
-quality filters (Oviedo Infrequency and MACI-II) and basic analysis utilities.
+> Ramírez-Sánchez JM et al. "A cross-sectional psychometric and demographic dataset of adolescents at high-risk for suicide." *Scientific Data* (under major revision).
 
-## Getting Started
+---
 
-1) Clone the repository:
+## How to use this repository
+
+This guide walks you from a fresh clone to fully reproduced paper results in four steps.
+
+### Step 1 — Set up the environment
+
+Requires [uv](https://docs.astral.sh/uv/getting-started/installation/) and Python 3.10.
 
 ```bash
-git clone <URL_DEL_REPO>
+git clone https://github.com/JMasr/visia_q_dataset
 cd visia_q_dataset
-```
-
-2) Create the environment and install dependencies:
-
-```bash
 make create_environment
 make requirements
 ```
 
-3) Download the CSV from Zenodo and place it at `data/raw/visia-q_dataset.csv`:
+Expected output of `make requirements`: `uv sync` resolves dependencies and installs them into `.venv/`.
+
+> All `make` commands call `.venv/bin/python` directly — you do **not** need to activate the virtual environment.
+
+---
+
+### Step 2 — Confirm the environment works
+
+```bash
+make test
+```
+
+Expected output: `26 passed` — unit tests run entirely on a synthetic dataset, no download needed. If this fails, the environment is not correctly set up.
+
+---
+
+### Step 3 — Download the dataset
+
+The raw CSV contains clinical data from minors and requires a Data Use Agreement.
+
+1. Request access at: **<https://doi.org/10.5281/zenodo.20703908>**
+2. Once approved, download and place the file:
 
 ```bash
 mkdir -p data/raw
-curl -L "<ZENODO_URL_DEL_CSV>" -o data/raw/visia-q_dataset.csv
+curl -L "https://zenodo.org/records/20703908/files/visia_q_dataset.csv" \
+     -o data/raw/visia_q_dataset.csv
 ```
 
-4) Run the filters with Make:
+Expected result: `data/raw/visia_q_dataset.csv` (207 rows × 145 columns, ~69 KB).
+
+---
+
+### Step 4 — Verify reproducibility
 
 ```bash
-make data_ov_maci_valid
-make data_ov_neg
-make data_maci_valid
+make reproduce
 ```
 
-## Usage
+Expected output: `✓  ALL VALUES MATCH THE PAPER  (0 failures)` — this confirms that every number in Tables 1, 3, and 4 of the paper can be derived from the raw data you downloaded. Exit code 0 = all 37 checks pass.
 
-Commands are based on Typer and can be executed from the repository root.
+---
 
-Dataset filtering:
+## What you can do next
 
-```bash
-python -m visia_q_dataset.dataset filter-all-valid
-python -m visia_q_dataset.dataset filter-oviedo-negative
-python -m visia_q_dataset.dataset filter-maci-valid
+Once the environment is set up and the dataset is in place, the following `make` commands are available:
+
+| Command | What it does | Output |
+|---|---|---|
+| `make data_ov_maci_valid` | Apply both quality filters → **N=191** | `data/processed/visia_q_dataset_ov_maci_valid.csv` |
+| `make data_ov_neg` | Oviedo filter only (ov_score ≤ 2) → N=203 | `data/processed/visia_q_dataset_ov_neg.csv` |
+| `make data_maci_valid` | MACI validity filter only → N=195 | `data/processed/visia_q_dataset_maci_valid.csv` |
+| `make metrics` | Cronbach α + Shapiro-Wilk per instrument | `reports/metrics/` |
+| `make stats` | Descriptive statistics per instrument per group | `reports/metrics/descriptive_stats.csv` |
+| `make reproduce` | Verify all paper values against raw data | Console output, exit 0/1 |
+| `make test` | Unit tests (no dataset needed) | `26 passed` |
+| `make test-integration` | Integration tests (dataset required) | `4 passed` |
+
+> Run `make help` to see all available commands.
+
+The recommended quality filter for analysis is `make data_ov_maci_valid`, which retains participants where responses are genuine (Oviedo Infrequency Scale negative, `ov_score ≤ 2`) and the MACI-II validity indicator passes (`maci_score_inval = 0`). Post-filter breakdown: HR-G = 39, PC-G = 49, GC-G = 103.
+
+---
+
+## Codebook
+
+`data/codebook.csv` documents all 145 variables. Each row contains: `variable`, `instrument`, `domain`, `item_number`, `item_text_es` (Spanish original), `item_text_en` (English translation), `data_type`, `description`, `range_or_values`, `notes`.
+
+---
+
+## Citation
+
+If you use this dataset or pipeline, please cite:
+
+```
+Ramírez-Sánchez JM et al. (2025). A cross-sectional psychometric and demographic
+dataset of adolescents at high-risk for suicide. Scientific Data.
+https://doi.org/10.5281/zenodo.20703908
 ```
 
-Auxiliary plots:
+---
 
-```bash
-python -m visia_q_dataset.plots clinical-group-distribution
-```
-
-All commands accept `--input-path`, `--output-path`, and `--skip-safeguard` (to bypass validation of the original dataset).
-
-## Cite
-
-If you use this dataset or code in academic work, please cite the associated data descriptor and the Zenodo record once available.
-
-## Project Organization
+## Project layout
 
 ```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         visia_q_dataset and configuration for tools like black
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-└── visia_q_dataset   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes visia_q_dataset a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── validation.py           <- Scripts with safety checks for data
-    │
-    └── plots.py                <- Code to create visualizations
+├── Makefile
+├── data/
+│   ├── codebook.csv             <- Variable codebook (145 columns, ES + EN item texts)
+│   ├── visia_q_structure.json   <- Instrument structure (used by make codebook)
+│   ├── raw/                     <- visia_q_dataset.csv  [download from Zenodo; gitignored]
+│   └── processed/               <- Filtered outputs     [generated by make data_*; gitignored]
+├── reports/
+│   └── metrics/                 <- Generated by make metrics / make stats (gitignored)
+├── tests/
+│   ├── conftest.py              <- Synthetic 10-row fixture for unit tests
+│   ├── test_data.py             <- Filter and validation tests
+│   └── test_codebook.py         <- Codebook pipeline tests
+└── visia_q_dataset/
+    ├── config.py                <- Paths
+    ├── codebook.py              <- Build codebook from visia_q_structure.json
+    ├── dataset.py               <- Quality filter commands
+    ├── metrics.py               <- Cronbach α, Shapiro-Wilk, descriptive stats
+    ├── plots.py                 <- Clinical group distribution figure
+    ├── reproduce.py             <- Paper value verification
+    └── validation.py            <- Schema check (207 rows × 145 columns)
 ```
-
---------

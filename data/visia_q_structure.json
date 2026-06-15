@@ -1,0 +1,272 @@
+{
+  "VISIA_Q": {
+    "EBIP": {
+      "q_name": "EBIP",
+      "q_file": "forminator-ebip-q-ecip-q-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "1. Alguien me ha golpeado, me ha pateado o me ha empujado",
+        "2. Alguien me ha insultado",
+        "3. Alguien le ha dicho a otras personas palabras malsonantes sobre mi",
+        "4. Alguien me ha amenazado",
+        "5. Alguien me ha robado o roto mis cosas",
+        "6. He sido excluido o ignorado por otras personas",
+        "7. Alguien ha difundido rumores sobre mi",
+        "8. He golpeado, pateado o empujado a alguien",
+        "O6. Si estás leyendo esto, contesta sí.",
+        "9. He insultado y he dicho palabras malsonantes a alguien",
+        "10. He dicho a otras personas palabras malsonantes sobre alguien",
+        "11. He amenazado a alguien",
+        "12. He robado o estropeado algo de alguien",
+        "13. He excluido o ignorado a alguien",
+        "14. He difundido rumores sobre alguien",
+        "Observaciones EBIP-Q"
+      ],
+      "columns_with_scores": [
+        "OV",
+        "ov_prev",
+        "ebipq_score"
+      ]
+    },
+    "ECIP": {
+      "q_name": "ECIP",
+      "q_file": "forminator-ebip-q-ecip-q-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "1. Alguien me ha dicho palabras malsonantes o me ha insultado usando el email o SMS",
+        "2. Alguien ha dicho a otros palabras malsonantes sobre mi usando internet o SMS",
+        "3. Alguien me ha amenazado a través de mensajes en internet o SMS",
+        "4. Alguien ha pirateado mi cuenta de correo y ha sacado mi información personal (por ejemplo, a través de mi email o red social)",
+        "5. Alguien ha pirateado mi cuenta y se ha hecho pasar por mi (a través de mensajería instantánea o cuentas en las redes sociales)",
+        "6. Alguien ha creado una cuenta falsa para hacerse pasar por mi (Facebook o MSN)",
+        "7. Alguien ha colgado información personal sobre mí en internet",
+        "O7. La distancia entre Madrid y Barcelona es mayor que entre Madrid y Nueva York.",
+        "8. Alguien ha colgado vídeos o fotos comprometidas mías en internet",
+        "9. Alguien ha retocado fotos mías que yo había colgado en internet",
+        "10. He sido exlcuído o ignorado de una red social o de chat",
+        "11. Alguien ha difundido rumores sobre mí por internet",
+        "12. He dicho palabras malsonantes sobre alguien o le he insultado usando SMS o mensajes en internet",
+        "13. He dicho palabras malsonantes sobre alguien a otras personas en mensajes por internet o por SMS",
+        "14. He amenazado a alguien a través de SMS o mensajes en internet",
+        "15. He pirateado la cuenta de correo de alguien y he robado su información personal (email o red social)",
+        "16. He pirateado la cuenta de alguien y me he hecho pasar por él/ella (mensajería instantánea o cuenta en red social)",
+        "17. He creado una cuenta falsa para hacerme pasar por otra persona (Facebook o MSN)",
+        "18. He colgado información personal de alguien en internet",
+        "O8. Hay personas a las que se le dan bien los idiomas.",
+        "19. He colgado videos o fotos comprometidas de alguien en internet",
+        "20. He retocado fotos o vídeos de alguien que estaban colgados en internet",
+        "21. He excluido o ignorado a alguien en una red social o chat",
+        "22. He difundido rumores sobre alguien en internet",
+        "Observaciones ECIP-Q"
+      ],
+      "columns_with_scores": [
+        "OV",
+        "ov_prev",
+        "ecipq_score"
+      ]
+    },
+    "EUPI": {
+      "q_name": "EUPI",
+      "q_file": "forminator-eupi-a-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "1. Cuando me conecto siento que el tiempo vuela y pasan las horas sin darme cuenta",
+        "2. En ocasiones he intentado controlar o reducir el uso que hago de Internet pero no fui capaz",
+        "3. En alguna ocasión he llegado a descuidar algunas tareas o a rendir menos (en exámenes, deportes, etc.) por conectarme a Internet",
+        "4. Cada vez me gusta más pasar horas conectado/a a Internet,9O En alguna ocasión he visto una película en la televisión",
+        "5. A veces me irrito o me pongo de mal humor por no poder conectarme a Internet o tener que desconectarme",
+        "6. Prefiero que mis padres no sepan el tiempo que paso conectado a Internet porque les parecería excesivo",
+        "7. He dejado de ir a sitios o de hacer cosas que antes me interesaban para poder conectarme a Internet",
+        "8. En alguna ocasión me he metido en líos o problemas por culpa de Internet",
+        "9. Me fastidia pasar horas sin conectarme a Internet",
+        "10. Cuando no puedo conectarme no paro de pensar si me estaré perdiendo algo importante,AO En alguna ocasión he visto a niños jugando en el parque",
+        "11. Digo o hago cosas por Internet que no sería capaz de decir/hacer en persona",
+        "Observaciones"
+      ],
+      "columns_with_scores": [
+        "OV",
+        "ov_prev",
+        "eupi-a_score"
+      ]
+    },
+    "MACI-II": {
+      "q_name": "MACI-II",
+      "q_file": "forminator-maci-ii-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "1 Introvertido",
+        "2 Inhibido",
+        "3 Sumiso",
+        "4 Dramático",
+        "5 Egocéntrico",
+        "6A Rebelde",
+        "6B Hostil",
+        "7 Conformista",
+        "8A Resentido",
+        "8B Agraviado",
+        "9 Tendencia límite",
+        "1 Invalidez",
+        "2 Inconsistencia",
+        "2 Pensamientos suicidas",
+        "3 Autolesiones no suicidas",
+        "Observaciones"
+      ],
+      "columns_with_scores": [
+        "OV",
+        "FF Tendencia suicida"
+      ]
+    },
+    "MFQ": {
+      "q_name": "MFQ",
+      "q_file": "forminator-mfq-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "1. Me sentí muy triste o infeliz",
+        "2. No disfruté nada",
+        "3. Tuve menos hambre que lo normal",
+        "4. Comí más que lo normal",
+        "5. Estuve tan cansado/a que pasé el tiempo y no hice nada",
+        "6. Me moví y caminé más despacio que lo normal",
+        "7. Estuve muy inquieto/a",
+        "8. Sentí como si ya no valiera",
+        "9. Me culpé por cosas que no fueron mi culpa",
+        "10. Tuve dificultades en tomar decisiones",
+        "4O. Se llega antes de Madrid a Moscú en coche que en avión",
+        "11. Estuve de mal humor y enojado/a con mis padres",
+        "12. Tuve menos ganas de hablar que lo normal",
+        "13. Hablé más despacio que lo normal",
+        "14. Lloré mucho",
+        "15. Pensé que no había nada bueno para mí en el futuro",
+        "16. Pensé que ya no valía la pena vivir",
+        "17. Pensé en morirme o en la muerte",
+        "18. Pensé que mi familia estaría mejor sin mí",
+        "19. Pensé en matarme",
+        "20. No tuve ganas de ver a mis amigos",
+        "21. Encontré difícil pensar claramente y concentrarme",
+        "22. Pensé que me pasarían cosas malas",
+        "23. Me odié a mí mismo/a",
+        "3O. Conozco a gente que lleva gafas",
+        "24. Sentí que era mala persona",
+        "25. Pensé que me veía feo/a",
+        "26. Me preocupé de molestias y dolores",
+        "27. Me sentí solo/a",
+        "28. Pensé que nadie realmente me quería",
+        "29. No me divertí en la escuela",
+        "30. Pensé que nunca podría ser tan bueno como otros niños",
+        "31. Hice todo mal",
+        "32. No dormí tan bien como duermo normalmente",
+        "33. Dormí mucho más que lo normal",
+        "Observaciones"
+      ],
+      "columns_with_scores": [
+        "OV",
+        "ov_prev",
+        "mfq_score"
+      ]
+    },
+    "PAYKEL": {
+      "q_name": "PAYKEL",
+      "q_file": "forminator-paykel-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "1. ¿Has sentido que la vida no merece la pena?",
+        "2. ¿Has deseado estar muerto? Por ejemplo, ir a dormir y desear no levantarse.",
+        "3. ¿Has pensado en quitarte la vida aunque realmente no lo fueras a hacer?",
+        "5O. En alguna ocasión he viajado en autobús",
+        "4. ¿Has llegado al punto en el que consideraras realmente quitarte la vida o hiciste planes sobre cómo lo harías?",
+        "5. ¿Alguna vez has intentado quitarte la vida?",
+        "xO. Aux",
+        "Observaciones"
+      ],
+      "columns_with_scores": [
+        "OV",
+        "ov_prev",
+        "paykel_score"
+      ]
+    },
+    "SDQ": {
+      "q_name": "SDQ",
+      "q_file": "forminator-sdq-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "1 Procuro ser agradable con los demás. Tengo en cuenta los sentimientos de otras personas",
+        "2 Soy inquieto/a, hiperactivo/a, no puedo permanecer quieto/a por mucho tiempo.",
+        "3 Suelo tener muchos dolores de cabeza, estómago o náuseas.",
+        "4 Normalmente comparto con otros mis juguetes, chucherías, lápices, etc.",
+        "5 Cuando me enfado, me enfado mucho y pierdo el control.",
+        "6 Prefiero estar solo/a que con gente de mi edad.",
+        "7 Por lo general soy obediente",
+        "8 A menudo estoy preocupado/a.",
+        "9 Ayudo si alguien está enfermo, disgustado o herido.",
+        "10 Estoy todo el tiempo moviéndome, me muevo demasiado.",
+        "1O En alguna ocasión he estado solo en casa",
+        "11 Tengo un/a buen/a amigo/a por lo menos.",
+        "12 Peleo con frecuencia con otros, manipulo a los demás.",
+        "13 Me siento a menudo triste, desanimado o con ganas de llorar.",
+        "14 Por lo general caigo bien a la otra gente de mi edad.",
+        "15 Me distraigo con facilidad, me cuesta concentrarme.",
+        "16 Me pongo nervioso/a con las situaciones nuevas, fácilmente pierdo la confianza en mí mismo/a.",
+        "17 Trato bien a los niños/as más pequeños/as.",
+        "18 A menudo me acusan de mentir o de hacer trampas.",
+        "19 Otra gente de mi edad se mete conmigo o se burla de mí.",
+        "20 A menudo me ofrezco para ayudar (a padres, maestros, niños).",
+        "2O Cuando estoy cansado o enfermo, a veces me apetece acostarme pronto en la cama.",
+        "21 Pienso las cosas antes de hacerlas.",
+        "22 Cojo cosas que no son mías de casa, la escuela o de otros sitios.",
+        "23 Me llevo mejor con adultos que con otros de mi edad.",
+        "24 Tengo muchos miedos, me asusto fácilmente.",
+        "25 Termino lo que empiezo, tengo buena concentración.",
+        "Observaciones"
+      ],
+      "columns_with_scores": [
+        "ov",
+        "Escala de problemas de conducta",
+        "Escala de hiperactividad",
+        "Escala de síntomas emocionales",
+        "Escala de problemas de relación",
+        "Escala de problemas prosociales",
+        "Puntuación de internalización",
+        "Puntuación de externalización",
+        "PUNTUACIÓN TOTAL SDQ"
+      ]
+    },
+    "PREGUNTAS": {
+      "q_name": "PREGUNTAS",
+      "q_file": "forminator-preguntas-4-2-ov",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "¿Puedes decirnos cómo eres? ¿Cómo te ves a tí mismo/a?",
+        "¿Cómo crees que te ven los demás?"
+      ],
+      "columns_with_scores": [
+        "ov"
+      ]
+    },
+    "VSC": {
+      "q_name": "VSC",
+      "q_file": "forminator-vsc",
+      "column_with_id": "crd",
+      "column_with_date": "Hora de envío",
+      "columns_with_items": [
+        "ID profesional",
+        "Sexo (biológico)",
+        "Género",
+        "Fecha de nacimiento",
+        "Nivel educativo",
+        "Grupo clínico",
+        "Diagnóstico",
+        "Tratamiento",
+        "Checkbox"
+      ],
+      "columns_with_scores": []
+    }
+  }
+}

@@ -1,6 +1,8 @@
-# Data
-/data/
+# Data — raw and processed files are not committed; codebook and structure JSON are public
+/data/raw/
+/data/processed/
 *.csv
+!data/codebook.csv
 
 # Mac OS-specific storage files
 .DS_Store

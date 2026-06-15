@@ -15,9 +15,12 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 INTERIM_DATA_DIR = DATA_DIR / "interim"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 EXTERNAL_DATA_DIR = DATA_DIR / "external"
-RAW_DATA_FILE = RAW_DATA_DIR / "visia-q_dataset.csv"
+RAW_DATA_FILE = RAW_DATA_DIR / "visia_q_dataset.csv"
 
 MODELS_DIR = PROJ_ROOT / "models"
 
 REPORTS_DIR = PROJ_ROOT / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
+
+STRUCTURE_JSON = DATA_DIR / "visia_q_structure.json"
+CODEBOOK_FILE = DATA_DIR / "codebook.csv"

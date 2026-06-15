@@ -28,7 +28,7 @@ def _write_dataset(df: pd.DataFrame, output_path: Path) -> None:
 @app.command()
 def filter_all_valid(
     input_path: Path = RAW_DATA_FILE,
-    output_path: Path = PROCESSED_DATA_DIR / "visia-q_dataset_ov_maci_valid.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "visia_q_dataset_ov_maci_valid.csv",
     skip_safeguard: bool = typer.Option(False, help="Skip validation against the raw dataset."),
 ) -> None:
     df = _load_dataset(input_path, skip_safeguard)
@@ -40,7 +40,7 @@ def filter_all_valid(
 @app.command()
 def filter_oviedo_negative(
     input_path: Path = RAW_DATA_FILE,
-    output_path: Path = PROCESSED_DATA_DIR / "visia-q_dataset_ov_neg.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "visia_q_dataset_ov_neg.csv",
     skip_safeguard: bool = typer.Option(False, help="Skip validation against the raw dataset."),
 ) -> None:
     df = _load_dataset(input_path, skip_safeguard)
@@ -52,7 +52,7 @@ def filter_oviedo_negative(
 @app.command()
 def filter_maci_valid(
     input_path: Path = RAW_DATA_FILE,
-    output_path: Path = PROCESSED_DATA_DIR / "visia-q_dataset_maci_valid.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "visia_q_dataset_maci_valid.csv",
     skip_safeguard: bool = typer.Option(False, help="Skip validation against the raw dataset."),
 ) -> None:
     df = _load_dataset(input_path, skip_safeguard)
@@ -64,7 +64,7 @@ def filter_maci_valid(
 @app.command()
 def main(
     input_path: Path = RAW_DATA_FILE,
-    output_path: Path = PROCESSED_DATA_DIR / "visia-q_dataset_ov_maci_valid.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "visia_q_dataset_ov_maci_valid.csv",
     skip_safeguard: bool = typer.Option(False, help="Skip validation against the raw dataset."),
 ) -> None:
     filter_all_valid(
