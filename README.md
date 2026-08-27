@@ -63,7 +63,18 @@ Expected result: `data/raw/visia_q_dataset.csv` (207 rows × 145 columns, ~69 KB
 make reproduce
 ```
 
-Expected output: `✓  ALL VALUES MATCH THE PAPER  (0 failures)` — this confirms that every number in Tables 1, 3, and 4 of the paper can be derived from the raw data you downloaded. Exit code 0 = all 37 checks pass.
+Expected output: `✓  ALL VALUES MATCH THE PAPER  (0 failures)`. Exit code 0 = all 168 checks pass.
+
+This verifies, value by value, every number printed in the following tables of the Data Descriptor:
+
+| Paper table | Content | Checks |
+|---|---|---|
+| Table 1 | Demographics per group and overall (N, sex, age, education level) | 48 |
+| Table 3 | Cronbach's α per instrument | 6 |
+| Table 4 | Distributional properties: Shapiro–Wilk normality outcome per instrument | 6 |
+| Table 5 | Descriptive statistics per instrument per group (mean, SD, median, min, max) | 120 |
+
+Two things in the paper are deliberately outside this check. Table 2 is the data dictionary, so it holds no computed values. The right-hand column of Table 4 is a prose description of each distribution's shape, not a statistic; only the normality outcome in that table is verified. Figure 1 is regenerated separately with `python -m visia_q_dataset.plots clinical-group-distribution`.
 
 ---
 
