@@ -1,7 +1,7 @@
 from pathlib import Path
 
-import pandas as pd
 from loguru import logger
+import pandas as pd
 import typer
 
 from visia_q_dataset.config import PROCESSED_DATA_DIR, RAW_DATA_FILE
@@ -67,9 +67,7 @@ def main(
     output_path: Path = PROCESSED_DATA_DIR / "visia_q_dataset_ov_maci_valid.csv",
     skip_safeguard: bool = typer.Option(False, help="Skip validation against the raw dataset."),
 ) -> None:
-    filter_all_valid(
-        input_path=input_path, output_path=output_path, skip_safeguard=skip_safeguard
-    )
+    filter_all_valid(input_path=input_path, output_path=output_path, skip_safeguard=skip_safeguard)
 
 
 if __name__ == "__main__":

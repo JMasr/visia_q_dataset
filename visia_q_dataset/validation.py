@@ -1,7 +1,7 @@
 from pathlib import Path
 
-import pandas as pd
 from loguru import logger
+import pandas as pd
 
 EXPECTED_ROW_COUNT = 207
 EXPECTED_COLUMN_COUNT = 145

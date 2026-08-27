@@ -1,8 +1,8 @@
 from pathlib import Path
 
+from loguru import logger
 import matplotlib.pyplot as plt
 import pandas as pd
-from loguru import logger
 import typer
 
 from visia_q_dataset.config import FIGURES_DIR, RAW_DATA_FILE

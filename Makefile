@@ -28,15 +28,15 @@ clean:
 
 ## Lint using ruff (use `make format` to do formatting)
 .PHONY: lint
-lint:
-	ruff format --check
-	ruff check
+lint: requirements
+	$(PYTHON_INTERPRETER) -m ruff format --check
+	$(PYTHON_INTERPRETER) -m ruff check
 
 ## Format source code with ruff
 .PHONY: format
-format:
-	ruff check --fix
-	ruff format
+format: requirements
+	$(PYTHON_INTERPRETER) -m ruff check --fix
+	$(PYTHON_INTERPRETER) -m ruff format
 
 
 

@@ -1,9 +1,9 @@
 from pathlib import Path
 from typing import Dict, List
 
+from loguru import logger
 import numpy as np
 import pandas as pd
-from loguru import logger
 from scipy import stats
 import typer
 
@@ -87,7 +87,9 @@ def _shapiro_by_group(df: pd.DataFrame, score_col: str) -> List[Dict[str, object
             try:
                 w_stat, p_val = stats.shapiro(group_data)
             except Exception as exc:  # pragma: no cover - scipy edge cases
-                logger.warning(f"Shapiro-Wilk failed for {score_col} in group {group_value}: {exc}")
+                logger.warning(
+                    f"Shapiro-Wilk failed for {score_col} in group {group_value}: {exc}"
+                )
                 w_stat, p_val = np.nan, 0.0
             is_normal = p_val > 0.05
 
@@ -110,8 +112,10 @@ def run_metrics(
     output_dir: Path = REPORTS_DIR / "metrics",
     skip_safeguard: bool = typer.Option(False, help="Skip validation against the raw dataset."),
 ) -> None:
+    # Metrics are computed on the COMPLETE sample (N=207), matching the paper.
+    # The quality filters live in _apply_quality_filters() and are applied by the
+    # `data_*` dataset commands, not here.
     df_full = _load_dataset(input_path, skip_safeguard)
-    df_filtered = _apply_quality_filters(df_full)
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -180,36 +184,39 @@ def descriptive_stats(
     df = _load_dataset(input_path, skip_safeguard)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    group_labels = {1: "HR-G", 2: "PC-G", 3: "GC-G", 0: "Total"}
     rows = []
     for instrument, score_col in SCORE_COLUMNS.items():
         for grp, label in [(1, "HR-G"), (2, "PC-G"), (3, "GC-G")]:
             data = df[df[GROUP_COL] == grp][score_col].dropna()
-            rows.append({
+            rows.append(
+                {
+                    "instrument": instrument,
+                    "domain": INSTRUMENT_DOMAIN[instrument],
+                    "score_column": score_col,
+                    "group": label,
+                    "n": len(data),
+                    "mean": round(float(data.mean()), 2),
+                    "sd": round(float(data.std(ddof=1)), 2),
+                    "median": round(float(data.median()), 1),
+                    "min": int(data.min()),
+                    "max": int(data.max()),
+                }
+            )
+        data_all = df[score_col].dropna()
+        rows.append(
+            {
                 "instrument": instrument,
                 "domain": INSTRUMENT_DOMAIN[instrument],
                 "score_column": score_col,
-                "group": label,
-                "n": len(data),
-                "mean": round(float(data.mean()), 2),
-                "sd": round(float(data.std(ddof=1)), 2),
-                "median": round(float(data.median()), 1),
-                "min": int(data.min()),
-                "max": int(data.max()),
-            })
-        data_all = df[score_col].dropna()
-        rows.append({
-            "instrument": instrument,
-            "domain": INSTRUMENT_DOMAIN[instrument],
-            "score_column": score_col,
-            "group": "Total",
-            "n": len(data_all),
-            "mean": round(float(data_all.mean()), 2),
-            "sd": round(float(data_all.std(ddof=1)), 2),
-            "median": round(float(data_all.median()), 1),
-            "min": int(data_all.min()),
-            "max": int(data_all.max()),
-        })
+                "group": "Total",
+                "n": len(data_all),
+                "mean": round(float(data_all.mean()), 2),
+                "sd": round(float(data_all.std(ddof=1)), 2),
+                "median": round(float(data_all.median()), 1),
+                "min": int(data_all.min()),
+                "max": int(data_all.max()),
+            }
+        )
 
     out = pd.DataFrame(rows)
     out_path = output_dir / "descriptive_stats.csv"

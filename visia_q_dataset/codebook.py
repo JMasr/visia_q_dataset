@@ -6,13 +6,14 @@ Three internal stages:
   2. build_mapping          — map items to published column names → {variable: item_text_es}
   3. update_codebook        — apply mapping to codebook.csv, inserting both text columns
 """
-import json
-import re
-from pathlib import Path
 
+import json
+from pathlib import Path
+import re
+
+from loguru import logger
 import pandas as pd
 import typer
-from loguru import logger
 
 from visia_q_dataset.config import CODEBOOK_FILE, STRUCTURE_JSON
 
@@ -23,10 +24,10 @@ app = typer.Typer()
 # ---------------------------------------------------------------------------
 
 _OVIEDO_SKIP = [
-    re.compile(r"^O\d+\."),        # O6. O7. O8.  (ECIP prefix-style)
-    re.compile(r"^\d+O[\s\.]"),    # 1O , 2O , 3O.  (SDQ / MFQ infix-style)
-    re.compile(r"^xO\."),          # xO.  (PAYKEL auxiliary)
-    re.compile(r"^Observaciones"), # free-text notes fields
+    re.compile(r"^O\d+\."),  # O6. O7. O8.  (ECIP prefix-style)
+    re.compile(r"^\d+O[\s\.]"),  # 1O , 2O , 3O.  (SDQ / MFQ infix-style)
+    re.compile(r"^xO\."),  # xO.  (PAYKEL auxiliary)
+    re.compile(r"^Observaciones"),  # free-text notes fields
 ]
 
 # EUPI items 4 and 10 contain an embedded Oviedo check after a comma.
@@ -39,22 +40,22 @@ _EMBEDDED_OVIEDO_RE = re.compile(r",\s*(?:\d+|[A-Z])O\s")
 # ---------------------------------------------------------------------------
 
 MACI_NAME_TO_COLUMN: dict[str, str] = {
-    "1 Introvertido":              "maci_score_intro",
-    "2 Inhibido":                  "maci_score_inhi",
-    "3 Sumiso":                    "maci_score_su",
-    "4 Dramático":                 "maci_score_drama",
-    "5 Egocéntrico":               "maci_score_ego",
-    "6A Rebelde":                  "maci_score_rebel",
-    "6B Hostil":                   "maci_score_hostil",
-    "7 Conformista":               "maci_score_conform",
-    "8A Resentido":                "maci_score_resent",
-    "8B Agraviado":                "maci_score_ag",
-    "9 Tendencia límite":          "maci_score_borderline",
-    "FF Tendencia suicida":        "maci_score_suicide",
-    "1 Invalidez":                 "maci_score_inval",
-    "2 Inconsistencia":            "maci_score_incons",
-    "2 Pensamientos suicidas":     "maci_score_suicide_thoughts",
-    "3 Autolesiones no suicidas":  "maci_score_nssi",
+    "1 Introvertido": "maci_score_intro",
+    "2 Inhibido": "maci_score_inhi",
+    "3 Sumiso": "maci_score_su",
+    "4 Dramático": "maci_score_drama",
+    "5 Egocéntrico": "maci_score_ego",
+    "6A Rebelde": "maci_score_rebel",
+    "6B Hostil": "maci_score_hostil",
+    "7 Conformista": "maci_score_conform",
+    "8A Resentido": "maci_score_resent",
+    "8B Agraviado": "maci_score_ag",
+    "9 Tendencia límite": "maci_score_borderline",
+    "FF Tendencia suicida": "maci_score_suicide",
+    "1 Invalidez": "maci_score_inval",
+    "2 Inconsistencia": "maci_score_incons",
+    "2 Pensamientos suicidas": "maci_score_suicide_thoughts",
+    "3 Autolesiones no suicidas": "maci_score_nssi",
 }
 
 # ---------------------------------------------------------------------------
@@ -64,13 +65,13 @@ MACI_NAME_TO_COLUMN: dict[str, str] = {
 
 SDQ_SCORE_NAME_TO_COLUMN: dict[str, str] = {
     "Escala de problemas de conducta": "sdq_score_epc",
-    "Escala de hiperactividad":        "sdq_score_eh",
-    "Escala de síntomas emocionales":  "sdq_score_ese",
+    "Escala de hiperactividad": "sdq_score_eh",
+    "Escala de síntomas emocionales": "sdq_score_ese",
     "Escala de problemas de relación": "sdq_score_epr",
     "Escala de problemas prosociales": "sdq_score_epp",
-    "Puntuación de internalización":   "sdq_score_pi",
-    "Puntuación de externalización":   "sdq_score_pe",
-    "PUNTUACIÓN TOTAL SDQ":            "sdq_score",
+    "Puntuación de internalización": "sdq_score_pi",
+    "Puntuación de externalización": "sdq_score_pe",
+    "PUNTUACIÓN TOTAL SDQ": "sdq_score",
 }
 
 # ---------------------------------------------------------------------------
@@ -78,25 +79,33 @@ SDQ_SCORE_NAME_TO_COLUMN: dict[str, str] = {
 # ---------------------------------------------------------------------------
 
 POSITIONAL_INSTRUMENTS: dict[str, tuple[str, int]] = {
-    "EBIP":   ("ebip",    14),  # JSON has 13 items; ebip_14 flagged as MANUAL_REVIEW
-    "ECIP":   ("ecip",    22),
-    "EUPI":   ("eupi",    11),  # items 4 and 10 include embedded Oviedo (stripped)
-    "MFQ":    ("mfq",     33),
-    "PAYKEL": ("paykel",   5),
-    "SDQ":    ("sdq",     25),
+    "EBIP": ("ebip", 14),  # JSON has 13 items; ebip_14 flagged as MANUAL_REVIEW
+    "ECIP": ("ecip", 22),
+    "EUPI": ("eupi", 11),  # items 4 and 10 include embedded Oviedo (stripped)
+    "MFQ": ("mfq", 33),
+    "PAYKEL": ("paykel", 5),
+    "SDQ": ("sdq", 25),
 }
 
 # Target column order after update
 _COLUMN_ORDER = [
-    "variable", "instrument", "domain", "item_number",
-    "item_text_es", "item_text_en",
-    "data_type", "description", "range_or_values", "notes",
+    "variable",
+    "instrument",
+    "domain",
+    "item_number",
+    "item_text_es",
+    "item_text_en",
+    "data_type",
+    "description",
+    "range_or_values",
+    "notes",
 ]
 
 
 # ===========================================================================
 # Stage 1 — extract
 # ===========================================================================
+
 
 def _is_skip(text: str) -> bool:
     return any(pat.match(text) for pat in _OVIEDO_SKIP)
@@ -135,6 +144,7 @@ def extract_spanish_items(json_path: Path) -> tuple[dict, dict]:
 # ===========================================================================
 # Stage 2 — map
 # ===========================================================================
+
 
 def build_mapping(items_by_instrument: dict, structure: dict) -> dict:
     """
@@ -187,6 +197,7 @@ def build_mapping(items_by_instrument: dict, structure: dict) -> dict:
 # Stage 3 — update
 # ===========================================================================
 
+
 def update_codebook(
     codebook_path: Path,
     mapping: dict,
@@ -221,9 +232,9 @@ def update_codebook(
 
     if save_intermediates:
         debug_path = codebook_path.parent / "codebook_mapping_debug.csv"
-        pd.DataFrame(
-            [{"variable": k, "item_text_es": v} for k, v in mapping.items()]
-        ).to_csv(debug_path, index=False)
+        pd.DataFrame([{"variable": k, "item_text_es": v} for k, v in mapping.items()]).to_csv(
+            debug_path, index=False
+        )
         logger.info(f"Intermediate mapping saved to {debug_path}")
 
     df.to_csv(codebook_path, index=False)
@@ -234,11 +245,16 @@ def update_codebook(
 # CLI
 # ===========================================================================
 
+
 @app.command()
 def build(
     json_path: Path = typer.Option(STRUCTURE_JSON, help="Path to visia_q_structure.json"),
-    codebook_path: Path = typer.Option(CODEBOOK_FILE, help="Path to codebook.csv (updated in-place)"),
-    save_intermediates: bool = typer.Option(False, "--save-intermediates", help="Write stage outputs for debugging"),
+    codebook_path: Path = typer.Option(
+        CODEBOOK_FILE, help="Path to codebook.csv (updated in-place)"
+    ),
+    save_intermediates: bool = typer.Option(
+        False, "--save-intermediates", help="Write stage outputs for debugging"
+    ),
 ) -> None:
     """Build codebook with Spanish (item_text_es) and English (item_text_en) item texts."""
     logger.info("Stage 1 — extract Spanish items from structure JSON")
