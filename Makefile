@@ -107,6 +107,11 @@ stats: requirements
 reproduce: requirements
 	$(PYTHON_INTERPRETER) -m visia_q_dataset.reproduce
 
+## Audit that released participant identifiers cannot be recomputed from public info
+.PHONY: uuid-audit
+uuid-audit: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.identifiers
+
 ## Build codebook with Spanish item texts from raw/visia_q_structure.json
 .PHONY: codebook
 codebook: requirements

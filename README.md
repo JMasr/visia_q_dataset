@@ -90,12 +90,41 @@ Once the environment is set up and the dataset is in place, the following `make`
 | `make metrics` | Cronbach α + Shapiro-Wilk per instrument | `reports/metrics/` |
 | `make stats` | Descriptive statistics per instrument per group | `reports/metrics/descriptive_stats.csv` |
 | `make reproduce` | Verify all paper values against raw data | Console output, exit 0/1 |
+| `make uuid-audit` | Verify released participant IDs cannot be recomputed from public info | Console output, exit 0/1 |
 | `make test` | Unit tests (no dataset needed) | `26 passed` |
 | `make test-integration` | Integration tests (dataset required) | `4 passed` |
 
 > Run `make help` to see all available commands.
 
 The recommended quality filter for analysis is `make data_ov_maci_valid`, which retains participants where responses are genuine (Oviedo Infrequency Scale negative, `ov_score ≤ 2`) and the MACI-II validity indicator passes (`maci_score_inval = 0`). Post-filter breakdown: HR-G = 39, PC-G = 49, GC-G = 103.
+
+---
+
+## Participant identifiers
+
+The `uuid` column holds RFC 4122 version-5 (name-based) UUIDs derived from each
+participant's internal sequential study code under a namespace that is private to
+the project and is not published. No direct or indirect participant identifier
+enters the derivation, and the code-to-identity mapping never left the case report
+form held at the recruiting hospitals.
+
+Because a version-5 UUID is deterministic, the scheme's protection rests entirely
+on the namespace staying secret. `make uuid-audit` tests that claim the way an
+outsider would: it sweeps 21 candidate namespaces — the five standard RFC 4122 ones
+plus sixteen derived from project- and institution-related strings — crossed with
+the study-code patterns of both recruitment sites, and reports whether any of the
+2,730,000 candidate derivations reproduces a released identifier.
+
+```
+Released identifiers : 207
+Namespaces swept     : 21
+Candidates tried     : 2,730,000
+Matches              : 0
+```
+
+The unit tests for this audit include a positive control: an identifier minted
+under a public namespace must be detected, so that a zero-match result on the real
+data is evidence rather than an artefact of a broken search.
 
 ---
 
