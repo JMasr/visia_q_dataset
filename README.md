@@ -36,7 +36,7 @@ Expected output of `make requirements`: `uv sync` resolves dependencies and inst
 make test
 ```
 
-Expected output: `26 passed` — unit tests run entirely on a synthetic dataset, no download needed. If this fails, the environment is not correctly set up.
+Expected output: `29 passed` — unit tests run entirely on a synthetic dataset, no download needed. If this fails, the environment is not correctly set up.
 
 ---
 
@@ -63,13 +63,13 @@ Expected result: `data/raw/visia_q_dataset.csv` (207 rows × 145 columns, ~69 KB
 make reproduce
 ```
 
-Expected output: `✓  ALL VALUES MATCH THE PAPER  (0 failures)`. Exit code 0 = all 168 checks pass.
+Expected output: `✓  ALL VALUES MATCH THE PAPER  (0 failures)`. Exit code 0 = all 167 checks pass.
 
 This verifies, value by value, every number printed in the following tables of the Data Descriptor:
 
 | Paper table | Content | Checks |
 |---|---|---|
-| Table 1 | Demographics per group and overall (N, sex, age, education level) | 48 |
+| Table 1 | Demographics per group and overall (N, sex, age, education level) | 35 |
 | Table 3 | Cronbach's α per instrument | 6 |
 | Table 4 | Distributional properties: Shapiro–Wilk normality outcome per instrument | 6 |
 | Table 5 | Descriptive statistics per instrument per group (mean, SD, median, min, max) | 120 |
@@ -91,7 +91,7 @@ Once the environment is set up and the dataset is in place, the following `make`
 | `make stats` | Descriptive statistics per instrument per group | `reports/metrics/descriptive_stats.csv` |
 | `make reproduce` | Verify all paper values against raw data | Console output, exit 0/1 |
 | `make uuid-audit` | Verify released participant IDs cannot be recomputed from public info | Console output, exit 0/1 |
-| `make test` | Unit tests (no dataset needed) | `26 passed` |
+| `make test` | Unit tests (no dataset needed) | `29 passed` |
 | `make test-integration` | Integration tests (dataset required) | `4 passed` |
 
 > Run `make help` to see all available commands.
