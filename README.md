@@ -44,13 +44,13 @@ Expected output: `26 passed` — unit tests run entirely on a synthetic dataset,
 
 The raw CSV contains clinical data from minors and requires a Data Use Agreement.
 
-1. Request access at: **<https://doi.org/10.5281/zenodo.20703908>**
+1. Request access at: **<https://doi.org/10.5281/zenodo.16600193>**
 2. Once approved, download and place the file:
 
 ```bash
 mkdir -p data/raw
-curl -L "https://zenodo.org/records/20703908/files/visia_q_dataset.csv" \
-     -o data/raw/visia_q_dataset.csv
+# Download the file from the record reached via the DOI above, then place it at:
+#   data/raw/visia_q_dataset.csv
 ```
 
 Expected result: `data/raw/visia_q_dataset.csv` (207 rows × 145 columns, ~69 KB).
@@ -141,7 +141,7 @@ If you use this dataset or pipeline, please cite:
 ```
 Ramírez-Sánchez JM et al. (2025). A cross-sectional psychometric and demographic
 dataset of adolescents at high-risk for suicide. Scientific Data.
-https://doi.org/10.5281/zenodo.20703908
+https://doi.org/10.5281/zenodo.16600193
 ```
 
 ---
