@@ -14,7 +14,7 @@ def real_dataset_path():
             f"Integration test requires the real dataset at:\n"
             f"  {RAW_DATA_FILE}\n"
             f"Request access and download it from:\n"
-            f"  https://doi.org/10.5281/zenodo.20703908"
+            f"  https://doi.org/10.5281/zenodo.16600193"
         )
     return RAW_DATA_FILE
 
