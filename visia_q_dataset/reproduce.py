@@ -72,11 +72,26 @@ _PAPER_ALPHA = {
     "MFQ": 0.9633,
     "P-SIS": 0.9283,
     "SDQ": 0.8220,
-    "ECIP": 0.9654,
+    "ECIP": 0.8556,
     "EBIP": 0.8338,
     "PIUS-a": 0.8390,
 }
-_PAPER_SHAPIRO = {k: "Yes (All groups)" for k in SCORE_COLUMNS}
+# Table 4, column "Shapiro-Wilk rejects normality": computed on the POOLED sample
+# (all three clinical groups together, N=207), as stated in the table footnote.
+_PAPER_SHAPIRO_POOLED = {k: "Yes" for k in SCORE_COLUMNS}
+
+# Table 4 footnote: outcome of the same test run WITHIN each clinical group.
+# True = normality rejected (p < 0.05) for that instrument in that group.
+_PAPER_SHAPIRO_BY_GROUP = {
+    "P-SIS": {"HR-G": True, "PC-G": True, "GC-G": True},
+    "MFQ": {"HR-G": True, "PC-G": True, "GC-G": True},
+    "SDQ": {"HR-G": False, "PC-G": False, "GC-G": True},
+    "EBIP": {"HR-G": False, "PC-G": True, "GC-G": True},
+    "ECIP": {"HR-G": True, "PC-G": True, "GC-G": True},
+    "PIUS-a": {"HR-G": False, "PC-G": False, "GC-G": True},
+}
+
+_SHAPIRO_GROUPS = ((1, "HR-G"), (2, "PC-G"), (3, "GC-G"))
 
 # Table 5 — descriptive statistics by clinical group, as printed in the paper.
 # Each entry is (mean, sd, median, min, max).
@@ -106,10 +121,10 @@ _PAPER_DESCRIPTIVES = {
         "Total": (6.81, 6.74, 5.0, 0, 37),
     },
     "ECIP": {
-        "HR-G": (4.70, 6.60, 2.0, 0, 34),
-        "PC-G": (2.96, 4.79, 1.0, 0, 24),
-        "GC-G": (1.33, 2.70, 0.0, 0, 18),
-        "Total": (2.46, 4.53, 1.0, 0, 34),
+        "HR-G": (4.60, 6.51, 2.0, 0, 34),
+        "PC-G": (2.76, 4.21, 1.0, 0, 19),
+        "GC-G": (1.28, 2.61, 0.0, 0, 18),
+        "Total": (2.37, 4.31, 1.0, 0, 34),
     },
     "PIUS-a": {
         "HR-G": (17.65, 8.34, 16.0, 5, 36),
@@ -243,13 +258,28 @@ def reproduce(
 
     # ── TABLE 4: SHAPIRO-WILK ─────────────────────────────────────────────────
     print(f"\n{'═' * 68}")
-    print("  TABLE 4 — Distributional Properties (Shapiro-Wilk, combined N=207)")
+    print("  TABLE 4 — Distributional Properties (Shapiro-Wilk)")
     print(f"{'═' * 68}\n")
 
+    print("  Pooled sample (all three groups together, N=207) — table column\n")
     for instrument, score_col in SCORE_COLUMNS.items():
         _, p_val = stats.shapiro(df[score_col].dropna())
-        flag = "Yes (All groups)" if p_val < 0.05 else "No"
-        _verify(f"  SW {instrument} (p={p_val:.2e})", flag, _PAPER_SHAPIRO[instrument], failures)
+        flag = "Yes" if p_val < 0.05 else "No"
+        _verify(
+            f"  SW {instrument} (p={p_val:.2e})", flag, _PAPER_SHAPIRO_POOLED[instrument], failures
+        )
+
+    print("\n  Within each clinical group — table footnote\n")
+    for instrument, score_col in SCORE_COLUMNS.items():
+        for group_value, label in _SHAPIRO_GROUPS:
+            data = df.loc[df["clinical_group"] == group_value, score_col].dropna()
+            _, p_val = stats.shapiro(data)
+            _verify(
+                f"  SW {instrument} in {label} (p={p_val:.2e}) rejects normality",
+                bool(p_val < 0.05),
+                _PAPER_SHAPIRO_BY_GROUP[instrument][label],
+                failures,
+            )
 
     # ── TABLE 5: DESCRIPTIVE STATISTICS ───────────────────────────────────────
     print(f"\n{'═' * 68}")

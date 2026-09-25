@@ -107,6 +107,27 @@ stats: requirements
 reproduce: requirements
 	$(PYTHON_INTERPRETER) -m visia_q_dataset.reproduce
 
+## Regenerate Figure 1 of the paper (floor effects: % of zero scores per group)
+.PHONY: figure1
+figure1: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.plots floor-effects --table-path reports/metrics/floor_effects.csv
+
+## Regenerate the clinical-group demographic bar plot (not used in the paper)
+.PHONY: plot_demographics
+plot_demographics: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.plots clinical-group-distribution
+
+## Audit the dataset against the instruments it encodes (coding, scores, codebook); optional INPUT=other.csv
+.PHONY: audit
+audit: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.audit $(if $(INPUT),--input $(INPUT),)
+
+## Re-derive the curated dataset from a previously released file (INPUT=, OUTPUT=, optional EXPECTED=)
+.PHONY: curate
+curate: requirements
+	$(PYTHON_INTERPRETER) -m visia_q_dataset.curate --input $(INPUT) --output $(OUTPUT) \
+		--changelog $(OUTPUT:.csv=_changes.csv) $(if $(EXPECTED),--expected $(EXPECTED),)
+
 ## Audit that released participant identifiers cannot be recomputed from public info
 .PHONY: uuid-audit
 uuid-audit: requirements
@@ -128,7 +149,7 @@ codebook: requirements
 define PRINT_HELP_PYSCRIPT
 import re, sys; \
 lines = '\n'.join([line for line in sys.stdin]); \
-matches = re.findall(r'\n## (.*)\n[\s\S]+?\n([a-zA-Z_-]+):', lines); \
+matches = re.findall(r'\n## (.*)\n[\s\S]+?\n([a-zA-Z0-9_-]+):', lines); \
 print('Available rules:\n'); \
 print('\n'.join(['{:25}{}'.format(*reversed(match)) for match in matches]))
 endef
