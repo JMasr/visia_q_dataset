@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 from loguru import logger
 import pandas as pd
@@ -154,12 +155,75 @@ EXPECTED_COLUMNS = [
 ]
 
 
+# MACI-II scale columns. They are the only ones allowed to be empty: two
+# participants completed the instrument but their protocol could not be scored,
+# and an unscored profile is blanked in full rather than carrying a sentinel
+# value that would enter arithmetic unnoticed. `maci_score_inval` is excluded
+# because the validity verdict is always present and records the reason.
+MACI_SCALE_COLUMNS = [
+    "maci_score_intro",
+    "maci_score_inhi",
+    "maci_score_su",
+    "maci_score_drama",
+    "maci_score_ego",
+    "maci_score_rebel",
+    "maci_score_hostil",
+    "maci_score_conform",
+    "maci_score_resent",
+    "maci_score_ag",
+    "maci_score_borderline",
+    "maci_score_suicide",
+    "maci_score_incons",
+    "maci_score_suicide_thoughts",
+    "maci_score_nssi",
+]
+MACI_VERDICT_COLUMN = "maci_score_inval"
+
+COLUMNS_ALLOWING_MISSING = set(MACI_SCALE_COLUMNS)
+
+# Signatures of dataset releases that this code no longer matches. A superseded
+# file has the same shape and the same column names as the current one, so the
+# schema check alone cannot tell them apart and the paper values would simply
+# fail to reproduce with no explanation. Each entry is a column, the range its
+# values must fall in, and what a value outside it means.
+SUPERSEDED_RELEASE_SIGNATURES = [
+    (
+        [f"ecip_{i}" for i in range(1, 23)],
+        (0, 4),
+        "ECIP-Q items carry the data-collection form's raw 1-5 response index "
+        "instead of the instrument's 0-4 scale",
+    ),
+    (
+        MACI_SCALE_COLUMNS,
+        (0, None),
+        "MACI-II scales use -1 for protocols that could not be scored instead of "
+        "leaving those cells empty",
+    ),
+]
+
+
+def detect_superseded_release(df: pd.DataFrame) -> List[str]:
+    """Return the reasons this file is an earlier release, empty if it is current."""
+    reasons = []
+    for columns, (low, high), reason in SUPERSEDED_RELEASE_SIGNATURES:
+        present = [column for column in columns if column in df.columns]
+        if not present:
+            continue
+        values = df[present]
+        out_of_range = (values < low).any().any()
+        if high is not None:
+            out_of_range = out_of_range or (values > high).any().any()
+        if out_of_range:
+            reasons.append(reason)
+    return reasons
+
+
 def validate_raw_dataset(input_path: Path) -> bool:
     if not input_path.exists():
         logger.error(
             f"Dataset not found at: {input_path}\n"
             "  → Request access and download it from Zenodo:\n"
-            "     https://doi.org/10.5281/zenodo.20703908\n"
+            "     https://doi.org/10.5281/zenodo.16600193\n"
             f"  → Then place the file at: {input_path}"
         )
         return False
@@ -182,6 +246,30 @@ def validate_raw_dataset(input_path: Path) -> bool:
             logger.warning(f"Missing columns: {missing}")
         if extra:
             logger.warning(f"Unexpected columns: {extra}")
+        ok = False
+
+    superseded = detect_superseded_release(df)
+    if superseded:
+        logger.error(
+            "This file is a superseded release of the dataset. It has the expected "
+            "shape and column names, so it loads, but the published values will not "
+            "reproduce from it."
+        )
+        for reason in superseded:
+            logger.error(f"  - {reason}")
+        logger.error(
+            "  Download the current release from https://doi.org/10.5281/zenodo.16600193 "
+            "(the concept DOI always resolves to it) and replace the file."
+        )
+        ok = False
+
+    undocumented = {
+        column: int(df[column].isna().sum())
+        for column in df.columns
+        if column not in COLUMNS_ALLOWING_MISSING and df[column].isna().any()
+    }
+    if undocumented:
+        logger.warning(f"Missing values in columns that should have none: {undocumented}")
         ok = False
 
     return ok

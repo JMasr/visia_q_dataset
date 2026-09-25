@@ -117,3 +117,25 @@ def test_filter_maci_valid_fixture(synthetic_dataset_path: Path, tmp_path: Path)
     )
     result = pd.read_csv(output_path)
     assert result.shape[0] == 6
+
+
+def test_a_superseded_release_is_named_as_such(synthetic_dataset_path, tmp_path):
+    # An earlier release has the same shape and the same column names, so the
+    # schema check alone cannot tell it apart; without this the paper values
+    # would just fail to reproduce with no explanation.
+    import pandas as pd
+
+    from visia_q_dataset.validation import detect_superseded_release
+
+    current = pd.read_csv(synthetic_dataset_path)
+    assert detect_superseded_release(current) == []
+
+    old = current.copy()
+    old["ecip_1"] = 5  # the form's raw 1-5 index, above the instrument's scale
+    reasons = detect_superseded_release(old)
+    assert len(reasons) == 1 and "ECIP-Q" in reasons[0]
+
+    old = current.copy()
+    old.loc[0, "maci_score_intro"] = -1  # the retired sentinel
+    reasons = detect_superseded_release(old)
+    assert len(reasons) == 1 and "MACI-II" in reasons[0]
