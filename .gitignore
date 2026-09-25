@@ -192,3 +192,5 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+# Generated figures (make figure1 / make plot_demographics)
+reports/figures/*.png
