@@ -42,7 +42,8 @@ Expected output: `41 passed` — unit tests run entirely on synthetic fixtures, 
 
 ### Step 3 — Download the dataset
 
-The raw CSV contains clinical data from minors and requires a Data Use Agreement.
+The raw CSV contains clinical data from minors and is released under the
+[Data Usage Agreement](DATA_USAGE_AGREEMENT.pdf), which every requester accepts.
 
 1. Request access at: **<https://doi.org/10.5281/zenodo.16600193>**
 2. Once approved, download and place the file:
@@ -173,6 +174,19 @@ data is evidence rather than an artefact of a broken search.
 
 ---
 
+## Licence and Data Usage Agreement
+
+The code in this repository is released under the MIT licence (see `LICENSE`).
+
+The dataset is **not** covered by that licence. It is available under restricted
+access on Zenodo (<https://doi.org/10.5281/zenodo.16600193>) and its use is governed
+by the [VisIA-Q Data Usage Agreement](DATA_USAGE_AGREEMENT.pdf). In summary, users
+must not attempt to re-identify participants, must store the data securely, must
+cite the dataset and its Data Descriptor, and must not redistribute the data to
+third parties. The agreement does not restrict the purpose of the research.
+
+---
+
 ## Citation
 
 If you use this dataset or pipeline, please cite:
@@ -197,6 +211,7 @@ dataset of adolescents at high-risk for suicide. Scientific Data (in revision).
 ## Project layout
 
 ```
+├── DATA_USAGE_AGREEMENT.pdf   <- Terms of use of the dataset (the code is MIT, see LICENSE)
 ├── Makefile
 ├── data/
 │   ├── codebook.csv             <- Variable codebook (145 columns, ES + EN item texts)
